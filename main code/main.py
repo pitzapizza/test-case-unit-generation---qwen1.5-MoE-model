@@ -1,4 +1,4 @@
-#we are now testing qwen communication and finding test cases for the minus operators of all primitve datatype of python.
+#we are now testing qwen communication and finding test cases of the prompt from prompt.txt that has been generated first, make sure to enter your prompt in generate-prompt.py before running this code
 import json
 from llama_cpp import Llama
 
