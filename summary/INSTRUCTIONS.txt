@@ -1,0 +1,42 @@
+Instruction:
+
+Enter your custom funcitonality prompt in your generate-prompt.py file and run it first. You can also directly change in prompt.txt if needed. This python exists so you can work on entering automated custom prompts later on.
+
+Run your main.py next. Make sure to follow the same exact format when typing your custom prompt, make sure to use strict prompting techniques and also make it instruction and 2 shot prompting. 
+Then json-output.json should be successfully updated when you run the program properly, do not change the temperature of the llm, it may not work because I tried using 0.2 and it kept giving me the wrong json format. 0.9 should work more than enough
+
+Your json format must be **valid JSON**:
+{
+  "response": {
+    "tests": {
+      "TC001": {
+        "description": "...",
+        "input": {
+          "username": "...",
+          "password": "..."
+        },
+        "expected_status_code": ...,
+        "expected_response": "..."
+      },
+      ...
+    }
+  }
+}
+
+For each test case, you will have a description, input -> username, password, expected status code, expected response. This exists for my project because of the secured login page  that i testing the functionality for.
+So to make your custom promp, make sure to only edited strucure of your respinse after each testcase obj like 
+
+{
+  "response": {
+    "tests": {
+      "TC001": {
+        <enter your custom format here>
+      },
+      "TC002": {
+        <enter your custom format here>
+      }
+      ...
+    }
+  }
+}
+
