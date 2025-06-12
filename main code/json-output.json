@@ -1,0 +1,42 @@
+{
+    "response": {
+        "tests": {
+            "TC001": {
+                "description": "Test case for successful login",
+                "input": {
+                    "username": "user1",
+                    "password": "123456"
+                },
+                "expected_status_code": 200,
+                "expected_response": {
+                    "status": "logged in",
+                    "message": "Welcome, user1"
+                }
+            },
+            "TC002": {
+                "description": "Test case for failed login",
+                "input": {
+                    "username": "user2",
+                    "password": "wrongpass"
+                },
+                "expected_status_code": 401,
+                "expected_response": {
+                    "status": "error",
+                    "message": "Invalid username or password"
+                }
+            },
+            "TC003": {
+                "description": "Test case for invalid username",
+                "input": {
+                    "username": "invalid_username",
+                    "password": "password123456"
+                },
+                "expected_status_code": 401,
+                "expected_response": {
+                    "status": "error",
+                    "message": "Invalid username"
+                }
+            }
+        }
+    }
+}

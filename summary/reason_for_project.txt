@@ -1,0 +1,92 @@
+started gemma project on 
+friday 06.06.2025 to
+tuesday 10.06.2025
+
+
+--RANT STARTS HERE--
+
+I have so far worked with gemma, it is very responsive and almost performs nicely whenever the prompts are really portraying the actual scenarios
+My work with gemma-7b-it-Q6_K.gguf model is test case unit generation specifically must generate different test cases with different fields to consider, their data, their test case result, their test case response
+Let's consider a login page for a banking system. We require let's say 2 fields. Username and Password.
+The AI should understand what login is, consider where this login is used, consider their sevearity and functionality, and then generation takes place
+The response generation of AI for my case should be in the structure of json file
+This is because I am needing {"tests":[{"TC01":[<rest of the imagined fields, changes according to functionality>], "TC02":..., ....}]}
+now accross different prompts, I will have almost the same structure followed upto TCxx (xx means the numbers) then according to functionality, fields considered will be imaginary
+"tests" key comes under "response" super key which is one of the dictionary keys of llm() function which returns the response of a given prompt
+here the raw_output stores only the contents within "response". This will be always enitrely stored a string.
+Now under "response", the data generated is stored in this manner(almost) "{"tests":[{"TC01":[<rest of the imagined fields, changes according to functionality>], "TC02":..., ....}]}"
+but actually the data is being stored as the format suggested inside the prompt LITERALLY
+
+{
+  "response": "```\n{ \"tests\": [ ... ] }\n\n} \n\n\n**Example:**  {\"Tests\":[ {\"test_case\":\"TC01\",\"description:\"Login with valid credentials\", input: {username:\u201cjohn.doe@examplemail\u201d, password\u201csecret\u201d}, expectedStatuscode\u201d:234, \u201cexpectedResponse\" : \u201dInvalid username or pasword.\u201d}] }\n```\n\n**Test Cases:**  \n\n\n## Secure Banking Login System Test Case Structure \n\n\n\n{ \"tests\": [   # List of test cases for secure banking login system.    ] ]}\n\n\n\n\n### TC01: SuccessfulLogin with Valid Credentials (2xx)\n\n\n\n\n\n- **test_case_id**: \u201cTC01\u201d\n -**description:** Successfully logs in a user  with valid credentials and returns the main page\n\n   * Input : \t{\"username\":\"john@example.com\", \"password\":\"secret\"}    # Replace with actual username & password for testing purposes     \t\t      - Expected Status Code: **201**, indicating successful login\n -**expected_response:** \u201cYou have successfully logged in, John Doe!\u201d\n\n\n### TC02 : Invalid Login Attempt (438)\n\n  *   test case id**: \"TC02\" \t    # Unique identifier for each test Case.     \t\t      - Description: Attempts to log into the system with invalid credentials and returns an error message\n -**input:** {\"username\":\"invalid_user@examplemail\", password:\"incorrectpassword\"}       \n\n  *   Expected Status Code**: **438**, indicating unauthorized access \t    # Expected HTTP status code for this test case.     \t\t      - expected Response: \"Invalid username or pasword.\"\n\n\n### TC02 : Missing Credentials (517)\n -**test_case id:** \u201cTC0  \u201d\n\n   * Input**: {\"username\": \"\", password:\"\"} \t    # Leaving both fields blank should result in an error.     \t\t      - Expected Status Code: **438**, indicating unauthorized access           \u00a0 \u00a0\n\n\n### TC2 : Strong Password Requirement (517)\n -**test_case id:** \u201cTC0  \u201d\n\n   * Input**: {\"username\":\"john@examplemail\", password:\"weakpassword\"} \t    # Weak passwords are not allowed.     \t\t      - Expected Status Code: **438**, indicating unauthorized access           \u00a0 \u00a0\n\n\n### TC2 : Lockout After Excessive Login Attempts (517)\n -**test_case id:** \u201cTC0  \u201d\n\n   * Input**: {\"username\":\"john@examplemail\", password:\"secret\"} \t    # Repeatedly attempting to log in with invalid credentials should lock the user out.     \t\t      - Expected Status Code: **438**, indicating unauthorized access"
+}
+
+
+{
+  "response": "
+\n\n{\n\"tests\": [ \n\n\n    {\"test_case_id\":\"TC01\", \"description:\" : \"...Log in with valid credentials...\",  \u201cinput\u201d: {\"username\u201d:\u201cjohn.doe@examplemailcom\u201d, \u201cpassword:** \u201dstrongpass\"},   'expectedStatuscode':234, 'ExpectedResponse':'Login successful.'},\n\n\n    {\"test_case_id\":\"TC02\", \"description:\" : \"...Log in with invalid username...\",  \u201cinput\u201d: {\"username\u201d:\u201cinvaliduser@@email.coom\u201d, \u201cpassword:** \u201dstrongpass\"},   'expectedStatuscode': 514, 'ExpectedResponse':'Invalid credentials.'},\n\n\n    {\"test_case_id\":\"TC03\", \"description:\" : \"...Log in with invalid password...\",  \u201cinput\u201d: {\"username\u201d:\u201cjohn@examplemailcom\u201c, \u2018Password\u2019: \u201cweakpassword!\u201d },   'expectedStatuscode': 514, 'ExpectedResponse':'Invalid credentials.'},\n\n\n    {\"test_case_id\":\"TC03\", \"description:\" : \"...Log in with forgotten password...\",  \u201cinput\u201d: {\"username\u201d:\u201cjohn.doe@examplemailcom\u201d, \u2018Password\u2019: \"\" } ,   'expectedStatuscode': 214, 'ExpectedResponse':'Forgot your Password link sent.'},\n\n\n    {\"test_case_id\":\"TC05\", \"description:\" : \"...Log in with strong password...\",  \u201cinput\u201d: {\"username\u201d:\u201cjohn.doe@examplemailcom\u201d, \u201cpassword:** \u201dsuperstrongpass\"},   'expectedStatuscode': 234, 'ExpectedResponse':'Login successful.'}\n\n]\n }\n\n\n
+"
+}
+
+the above 2 responses are generated by ai in 2 different runs, obviously there were changes found.
+
+newlines are considered because of the lack of understanding of the prompt strucutre. I gave it like
+{
+    "test":[
+        "TC01":{"...."},
+        "TC02":{"..."},
+        ......
+    ]
+}
+should consider this format of json. But instead it considered the newline \n after '{' each and every time.
+No amount of prompting techniques used diversed not respond with valid json format.
+Then I shiifted to newer data format, the og csv. But still the new line issue never left. I suggested a format of 
+
+TCxx | Description | username | password | expected response
+
+where the next testcase is recorded as the next record. 
+First issue I faced was concatenation of all the fields into one field like "TCxx Description Username Password Expected Response"
+Then I suggested to seperate using commas and all the considered fields were seperated with commas.
+
+Only worked for fields after description. AI decided to always concatenate TCxx with description each and ever time even after mentioning to seperate as per the format.
+Here came the newer issue
+
+TC01 | Successful login with valid credentials  | john@bankapp23456789mailcom   |\$StrongPass!QazwE#rT    \n TC02	Login attempt with incorrect password     		 |\John_Doe@@&*HsdC|/WrongPasssword | Invalid username orpassword. Please try again.|
+TC03| Login with both fields blank  |-   |\$StrongPass!QazwE#rT    \n TC04	Weak passowrd with common word "weak" 		 |\John_Doe@@&*HsdC|/weakaw | Invalid password. Please try again.|
+TC05| Locked account after failed attempts  |-   |\$StrongPass!QazwE#rT    \n TC06	Locked out due to excessive login failures with valid credentials 		 |\John_Doe@@&*HsdC|/WrongPasssword | Account locked. Please try again later.|
+
+how can I say it was a new issue? clearly \n crap never left. Even after partition of \n did not result to a proper text. 
+
+later on it started ignoring the fields to after test case numbering. 
+
+this is the latest output obtained and was explicitly partioned by me as a csv file 
+
+response-output.txt file contents:
+
+Please try again.
+
+**Test Cases:**
+```text 
+
+
+TC01 | Successful login with valid credentials  | john@bankapp23456789mailcom   |\$StrongPass!QazwE#rT    \n TC02	Login attempt with incorrect password     		 |\John_Doe@@&*HsdC|/WrongPasssword | Invalid username orpassword. Please try again.|
+TC03| Login with both fields blank  |-   |\$StrongPass!QazwE#rT    \n TC04	Weak passowrd with common word "weak" 		 |\John_Doe@@&*HsdC|/weakaw | Invalid password. Please try again.|
+TC05| Locked account after failed attempts  |-   |\$StrongPass!QazwE#rT    \n TC06	Locked out due to excessive login failures with valid credentials 		 |\John_Doe@@&*HsdC|/WrongPasssword | Account locked. Please try again later.|
+
+```
+
+text-case-output.csv file contents: 
+
+"Test Case ID","Scenario","Username","Password","Expected Output"
+"TC01","","john@bankapp23456789mailcom","\$StrongPass!QazwE#rT    \n TC02	Login attempt with incorrect password","\John_Doe@@&*HsdC"
+
+I gave up with gemma 7b knowing it is designed for a multimodel capability transformer such as image generation, text generation but never for something for like json file response.
+
+that is where I found out about qwen model which uses MoE architecture {mixutre of experts} which heavily reasons structured outputs.
+
+--END--
+
+
+
+RESULT => today is 11.06.2025 and my work for test case generation unit for functionality prompts has been a successful completion
+I have utilized qwen1.5-moe-a2.7b-chat-q3_k_s.gguf as gguf model which uses MoE architecture for a structured output response
