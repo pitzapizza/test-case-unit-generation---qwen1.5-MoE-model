@@ -6,7 +6,7 @@ This project automates unit test case generation using **Qwen models**, ensuring
 ## **How to Download the Qwen Model**
 The project requires the **Qwen1.5-MoE-A2.7B-Chat-Q3_K_S** model. You can download it from the official Qwen repository:
 
-👉 [Qwen Model Download]([https://github.com/QwenLM/Qwen](https://huggingface.co/Gapsar/Qwen1.5-MoE-A2.7B-Chat-Q3_K_S-GGUF/blob/main/qwen1.5-moe-a2.7b-chat-q3_k_s.gguf))
+👉 [Qwen Model Download](https://huggingface.co/Gapsar/Qwen1.5-MoE-A2.7B-Chat-Q3_K_S-GGUF/blob/main/qwen1.5-moe-a2.7b-chat-q3_k_s.gguf)
 
 Once downloaded, update the `MODEL_PATH` in the code to reflect your local directory.
 
