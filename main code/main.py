@@ -3,7 +3,7 @@ import json
 from llama_cpp import Llama
 
 # Path to Qwen GGUF model
-MODEL_PATH = r"D:\qwen1.5-moe-a2.7b-chat-q3_k_s\qwen1.5-moe-a2.7b-chat-q3_k_s.gguf"
+MODEL_PATH = r"D:\qwen1.5-moe-a2.7b-chat-q3_k_s\qwen1.5-moe-a2.7b-chat-q3_k_s.gguf" #Change your path according to your needs, this needs the qwen1.5-moe-a2.7b-chat-q3_k_s.gguf model to be downloaded
 
 # Load Qwen GGUF model with optimized settings
 llm = Llama(model_path=MODEL_PATH, n_ctx=8192, n_batch=512)
@@ -36,7 +36,7 @@ except json.JSONDecodeError:
     structured_json = {"response": {"tests": {}}}  # Fallback empty JSON structure
 
 # Save JSON to a file
-JSON_FILE_PATH = r"D:\test-case-generator\src\test-case-generation-qwen\main code\json-output (1).json"
+JSON_FILE_PATH = r"D:\test-case-generator\src\test-case-generation-qwen\main code\json-output (1).json" #Change your path according to your needs
 with open(JSON_FILE_PATH, "w", encoding="utf-8") as json_file:
     json.dump(structured_json, json_file, indent=4)
 
